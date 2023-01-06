@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualBasic.FileIO;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Reflection;
 
@@ -28,7 +28,7 @@ namespace AndradeBank
         }
         static void DadosConta(int index, List<string> cpfs, List<string> nomes, List<double> saldos)
         {
-            Console.Write($"CPF = {cpfs[index]} | Titular = {nomes[index]} ");
+            Console.Write($" \nCPF = {cpfs[index]} | Titular = {nomes[index]} ");
         }
         static void DeletarCliente(List<string> cpfs, List<string> nomes, List<string> senhas, List<double> saldos)
         {
@@ -160,16 +160,23 @@ namespace AndradeBank
         }
         public static void Menu()
         {
+            Console.WriteLine("\n------MENU------");
             Console.WriteLine("1 - Login cliente");
             Console.WriteLine("2 - Cadastrar novo cliente");
             Console.WriteLine("3 - Deletar um cliente");
             Console.WriteLine("4 - Listar todas as contas");
-            Console.WriteLine("5 - Detalhes de uma conta");
-            Console.WriteLine("6 - Saldo");
-            Console.WriteLine("7 - Deposito");
-            Console.WriteLine("8 - Saque");
-            Console.WriteLine("9 - Transferencia");
-            Console.WriteLine("0 - Para deslogar da sua conta");
+            Console.WriteLine("0 - Sair do programa");
+            Console.Write("Digite a opção desejada: ");
+        }
+        public static void MenuCliente()
+        {
+            Console.WriteLine("\n---MENU CLIENTES---");
+
+            Console.WriteLine("1 - Saldo da conta");
+            Console.WriteLine("2 - Depositar em conta");
+            Console.WriteLine("3 - Saque em conta");
+            Console.WriteLine("4 - Transferencia entre contas");
+            Console.WriteLine("5 - Sair da conta");
             Console.Write("Digite a opção desejada: ");
         }
 
@@ -178,15 +185,19 @@ namespace AndradeBank
             Console.Write("Digite o cpf:");
             string loginCpf = Console.ReadLine();
             int indexConta = cpfs.FindIndex(cpf => cpf == loginCpf);
-            string senha = null;
+            string senha;
             do
             {
-                Console.WriteLine("Digite a senha:");
+                Console.Write("Digite a senha:");
                 senha = Console.ReadLine();
-                Console.WriteLine("senha incorreta");
+                if (senhas[indexConta] != senha)
+                {
+                    Console.WriteLine("senha incorreta.");
+               
+                }   
 
-            } while (senhas[indexConta] != senha);
-
+            } while(senhas[indexConta] != senha);
+            senha = null;
             Console.WriteLine("Login realizado com sucesso.");
 
         }
@@ -198,6 +209,7 @@ namespace AndradeBank
             List<double> saldos = new List<double>();
 
             int opcaoMenu;
+            Console.WriteLine("Bem-vinde ao Andrade Bank!");
             do
             {
                 Menu();
@@ -210,8 +222,37 @@ namespace AndradeBank
                         Console.WriteLine("Muito obrigado por utilizar nosso banco. Volte sempre!");
                         break;
                     case 1:
-                        Console.WriteLine("Vamos la:");
+                        Console.Clear();
                         LoginCliente(cpfs, senhas);
+                        int opcaoCliente;
+                        do
+                        {
+                            Console.WriteLine("Seja bem-vindo de volta:");
+                            Console.WriteLine("O que deseja fazer? ");
+                            MenuCliente();
+                            opcaoCliente = int.Parse(Console.ReadLine());
+
+                            switch (opcaoCliente)
+                            {
+                                case 1:
+                                    SaldoCliente(cpfs, nomes, saldos);
+                                    break;
+                                case 2:
+                                    DepositoCliente(cpfs, nomes, saldos);
+                                    break;
+                                case 3:
+                                    SaqueCliente(cpfs, nomes, saldos);
+                                    break;
+                                case 4:
+                                    Transferencia(cpfs, cpfs, saldos);
+                                    break;
+                                case 5:
+                                    Console.WriteLine("Saindo da conta, retornando ao menu principal...");
+                                    break;
+                            }
+
+                        } while (opcaoCliente != 5);
+
                         break;
                     case 2:
                         CadastroCliente(cpfs, nomes, senhas, saldos);
@@ -229,37 +270,14 @@ namespace AndradeBank
                         ContaDetalhes(cpfs, nomes, saldos);
 
                         break;
-                    case 6:
-                        SaldoCliente(cpfs, nomes, saldos);
-                        break;
-                    case 7:
-                        DepositoCliente(cpfs, nomes, saldos);
-                        break;
-                    case 8:
-                        SaqueCliente(cpfs, nomes, saldos);
-                        break;
-                    case 9:
-                        Transferencia(cpfs, cpfs, saldos);
-
-                        break;
 
                 }
-                Console.WriteLine("-----------------");
+                Console.WriteLine("\n" +
+                    "-----------------");
 
             } while (opcaoMenu != 0);
 
-            Console.Clear();
-            Console.Write("Deseja realizar login novamente? (S/N):");
-            char login = char.ToUpper(char.Parse(Console.ReadLine()));
-            if (login == 'S')
-                LoginCliente(cpfs, senhas);
-            else if (login == 'N')
-            {
-                Console.WriteLine("Obrigado, volte sempre");
-            }
-            else
-                Console.WriteLine("Opção nao encontrada. Entre no programa novamente.");
-
+ 
         }
 
 
