@@ -272,8 +272,7 @@ namespace AndradeBank
                         break;
 
                 }
-                Console.WriteLine("\n" +
-                    "-----------------");
+                Console.WriteLine("\n-----------------");
 
             } while (opcaoMenu != 0);
 
